@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VU History MA Profile Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0077B3 0%, #005a87 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #0077B3;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header-logo {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro-text {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .intro-text h2 {
+            color: #0077B3;
+            margin: 25px 0 15px 0;
+            font-size: 20px;
+        }
+
+        .intro-text ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .intro-text li {
+            margin: 8px 0;
+        }
+
+        .profiles-list {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .profiles-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .profiles-list li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .profiles-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .checkmarks {
+            margin: 20px 0;
+        }
+
+        .checkmarks div {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .checkmarks div:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #0077B3;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 30px auto;
+        }
+
+        .btn-primary:hover {
+            background: #005a87;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 119, 179, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .question-container {
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #0077B3 0%, #005a87 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .question-title {
+            font-size: 22px;
+            color: #0077B3;
+            margin-bottom: 10px;
+        }
+
+        .question-instruction {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .option {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #0077B3;
+            background: #f1f5f9;
+        }
+
+        .option.selected {
+            border-color: #0077B3;
+            background: #eef2ff;
+        }
+
+        .ranking-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ranking-option select {
+            padding: 8px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 16px;
+            min-width: 60px;
+        }
+
+        .ternary-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .ternary-text {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .ternary-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ternary-btn {
+            padding: 8px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .ternary-btn:hover {
+            border-color: #0077B3;
+        }
+
+        .ternary-btn.active {
+            background: #0077B3;
+            color: white;
+            border-color: #0077B3;
+        }
+
+        .did-you-know {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .did-you-know.show {
+            display: block;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .did-you-know strong {
+            color: #92400e;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-secondary {
+            background: #94a3b8;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #64748b;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #0077B3 0%, #005a87 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .results-header h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .results-section {
+            margin: 30px 0;
+        }
+
+        .results-section h3 {
+            color: #1e3a8a;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .results-section ul {
+            line-height: 1.8;
+        }
+
+        .faculty-card {
+            background: #f8fafc;
+            border-left: 4px solid #0077B3;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .faculty-card strong {
+            color: #0077B3;
+            font-size: 18px;
+        }
+
+        .rma-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .rma-box h3 {
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+
+        .secondary-interest {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .next-steps {
+            background: #f1f5f9;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        .next-steps h3 {
+            color: #0077B3;
+            margin-bottom: 20px;
+        }
+
+        .next-steps a {
+            color: #0077B3;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .next-steps a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .question-title {
+                font-size: 18px;
+            }
+
+            .ternary-option {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .ternary-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Find Your Path in the History MA at VU Amsterdam</h1>
+        </div>
+
+        <div class="content">
+            <!-- Introduction Screen -->
+            <div id="intro-screen">
+                <div class="intro-text">
+                    <p style="font-size: 18px; margin-bottom: 25px;">At VU Amsterdam, we believe history is more than understanding the past—it's essential for navigating the present. We train <strong>critically engaged historians</strong> who bring historical perspective to today's urgent challenges: inequality, climate change, colonial legacies, and democratic fragility.</p>
+
+                    <h2>Why study the History MA at VU Amsterdam?</h2>
+                    <p style="margin-bottom: 20px;">Our MA programme combines rigorous scholarship with real-world impact. You'll work closely with internationally recognized faculty in small seminars, gain professional experience through integrated internships (the only Dutch history MA to do so), and build expertise in Amsterdam—a city where global histories intersect.</p>
+
+                    <p style="margin-bottom: 25px;">We don't believe in one-size-fits-all education. That's why we offer <strong>four specialized profiles</strong>, each combining core historical training with distinctive interdisciplinary approaches. Whether you're passionate about social movements, colonial justice, religious cultures, or environmental crises, you'll find your path here.</p>
+
+                    <h2>Discover your personalized roadmap</h2>
+                    <p style="margin-bottom: 15px;">Every historian has unique interests and goals. Take this 5-minute quiz to receive personalized recommendations about:</p>
+                    
+                    <div class="checkmarks">
+                        <div><strong>Which profile</strong> best matches your interests and career goals</div>
+                        <div><strong>Faculty members</strong> whose research aligns with your interests</div>
+                        <div><strong>Internship opportunities</strong> tailored to your field</div>
+                        <div><strong>Whether our Research Master</strong> might be the right fit for you</div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="startQuiz()">START QUIZ</button>
+            </div>
+
+            <!-- Quiz Questions -->
+            <div id="quiz-screen" style="display: none;">
+                <div class="progress-text" id="progress-text">Question 1 of 10</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 10%"></div>
+                </div>
+
+                <!-- Questions will be dynamically inserted here -->
+                <div id="questions-container"></div>
+
+                <div class="navigation">
+                    <button class="btn-secondary" id="back-btn" onclick="previousQuestion()" style="display: none;">Back</button>
+                    <button class="btn-primary" id="next-btn" onclick="nextQuestion()" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-screen" class="results-container">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const config = {
+            links: {
+                ma_programme: "https://vu.nl/en/education/master/history",
+                staff_page: "https://vu.nl/en/about-vu/faculties/school-of-humanities/teams/history-cluster-staff",
+                application: "https://vu.nl/en/education/apply",
+                rma: "https://vu.nl/en/education/master/humanities-research-global-history"
+            },
+            contact: {
+                email: "history@vu.nl"
+            },
+            deadlines: {
+                eu_eea: "1 May 2026",
+                non_eu_eea: "1 April 2026"
+            }
+        };
+
+        // Quiz data
+        let currentQuestion = 0;
+        let student_background = ''; // Track student background for messaging
+        let scores = {
+            social_movements: 0,
+            injustices: 0,
+            religion_culture: 0,
+            environment: 0,
+            method_archival: 0,
+            method_oral: 0,
+            method_material: 0,
+            method_digital: 0,
+            temporal_earlymodern: 0,
+            temporal_modern: 0,
+            temporal_contemporary: 0,
+            temporal_longduration: 0,
+            geo_european: 0,
+            geo_globalsouth: 0,
+            geo_transnational: 0,
+            career_academia: 0,
+            career_heritage: 0,
+            career_policy: 0,
+            career_teaching: 0,
+            career_research: 0,
+            theory_score: 0
+        };
+
+        const questions = [
+            {
+                type: 'multiple',
+                title: 'What is your educational background?',
+                instruction: 'Choose one:',
+                background_question: true,
+                options: [
+                    {
+                        text: 'BA in History at VU Amsterdam',
+                        background: 'vu_history'
+                    },
+                    {
+                        text: 'BA in History at another university',
+                        background: 'other_history'
+                    },
+                    {
+                        text: 'BA in Social Sciences (Anthropology, Political Science, Sociology, International Relations, etc.)',
+                        background: 'social_sciences'
+                    },
+                    {
+                        text: 'BA in Humanities (Religious Studies, Philosophy, Theology, Cultural Studies, European Studies, etc.)',
+                        background: 'humanities'
+                    },
+                    {
+                        text: 'University College or Liberal Arts College',
+                        background: 'liberal_arts'
+                    }
+                ]
+            },
+            {
+                type: 'ranking',
+                title: 'What draws you to study history?',
+                instruction: 'Rank these motivations from most important (1) to least important (4):',
+                options: [
+                    {
+                        text: 'Exploring how beliefs, rituals, and cultural practices shape identities and communities',
+                        scoring: {1: {religion_culture: 4}, 2: {religion_culture: 2}, 3: {religion_culture: 1}, 4: {}}
+                    },
+                    {
+                        text: 'Understanding how ordinary people organized, resisted, and fought for change throughout history',
+                        scoring: {1: {social_movements: 4}, 2: {social_movements: 2}, 3: {social_movements: 1}, 4: {}}
+                    },
+                    {
+                        text: 'Understanding how humans and nature have interacted and how societies responded to environmental challenges',
+                        scoring: {1: {environment: 4}, 2: {environment: 2}, 3: {environment: 1}, 4: {}}
+                    },
+                    {
+                        text: 'Examining how power structures created inequalities and injustices that still shape our world today',
+                        scoring: {1: {injustices: 4}, 2: {injustices: 2}, 3: {injustices: 1}, 4: {}}
+                    }
+                ]
+            },
+            {
+                type: 'ranking',
+                title: 'Imagine you\'re planning your thesis research. Which scenario excites you most?',
+                instruction: 'Rank these research scenarios from most exciting (1) to least exciting (5):',
+                options: [
+                    {
+                        text: 'Using maps, environmental data, and long-term records to track how societies adapted to climate shifts',
+                        scoring: {1: {environment: 4, method_digital: 2, geo_transnational: 1}, 2: {environment: 2, method_digital: 1}, 3: {environment: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Investigating religious texts, material objects, or cultural practices to understand identity formation',
+                        scoring: {1: {religion_culture: 4, method_material: 2, theory_score: 1}, 2: {religion_culture: 2, method_material: 1}, 3: {religion_culture: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Tracing a strike, protest movement, or grassroots organization through archival records and oral histories',
+                        scoring: {1: {social_movements: 4, method_archival: 2, method_oral: 2}, 2: {social_movements: 2, method_archival: 1, method_oral: 1}, 3: {social_movements: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Analyzing colonial court records, legal documents, or government archives to expose historical injustices',
+                        scoring: {1: {injustices: 4, method_archival: 2, temporal_modern: 1}, 2: {injustices: 2, method_archival: 1}, 3: {injustices: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Conducting oral history interviews to document and preserve community memories and experiences',
+                        scoring: {1: {social_movements: 2, religion_culture: 2, method_oral: 3}, 2: {social_movements: 1, religion_culture: 1, method_oral: 2}, 3: {method_oral: 1}, 4: {}, 5: {}}
+                    }
+                ],
+                snippet: 'Did you know? VU is the only history MA in the Netherlands that integrates mandatory internships, connecting your research interests directly to professional practice at institutions like museums, archives, and NGOs.'
+            },
+            {
+                type: 'ranking',
+                title: 'After graduating, where do you see yourself working?',
+                instruction: 'Rank these career paths from most appealing (1) to least appealing (6):',
+                options: [
+                    {
+                        text: 'Academia - pursuing a PhD and building a research career',
+                        scoring: {1: {career_academia: 5, theory_score: 3, social_movements: 1, injustices: 1, religion_culture: 1, environment: 1}, 2: {career_academia: 3, theory_score: 2}, 3: {career_academia: 1, theory_score: 1}, 4: {}, 5: {}, 6: {}}
+                    },
+                    {
+                        text: 'A museum, heritage site, or cultural institution curating exhibitions and public programs',
+                        scoring: {1: {religion_culture: 3, career_heritage: 4}, 2: {religion_culture: 2, career_heritage: 2}, 3: {religion_culture: 1}, 4: {}, 5: {}, 6: {}}
+                    },
+                    {
+                        text: 'Secondary education - teaching history at a gymnasium or high school',
+                        scoring: {1: {career_teaching: 4, social_movements: 1, injustices: 1, religion_culture: 1, environment: 1}, 2: {career_teaching: 2}, 3: {}, 4: {}, 5: {}, 6: {}}
+                    },
+                    {
+                        text: 'An environmental organization, government agency, or research institute focused on sustainability and climate',
+                        scoring: {1: {environment: 3, career_policy: 2, career_research: 1}, 2: {environment: 2, career_policy: 1}, 3: {environment: 1}, 4: {}, 5: {}, 6: {}}
+                    },
+                    {
+                        text: 'An NGO, think tank, or international organization using history to shape policy and social justice work',
+                        scoring: {1: {social_movements: 2, injustices: 2, career_policy: 4}, 2: {social_movements: 1, injustices: 1, career_policy: 2}, 3: {career_policy: 1}, 4: {}, 5: {}, 6: {}}
+                    },
+                    {
+                        text: 'Journalism, media, or documentary production - communicating history to public audiences',
+                        scoring: {1: {social_movements: 1, injustices: 1, religion_culture: 1, environment: 1, career_policy: 1}, 2: {social_movements: 1, injustices: 1}, 3: {}, 4: {}, 5: {}, 6: {}}
+                    }
+                ],
+                snippet: 'Did you know? VU historians lead major research projects on slavery, including investigations for the City of Amsterdam and Dutch institutions into their historic roles in the slave trade.'
+            },
+            {
+                type: 'ranking',
+                title: 'Which historical themes or topics interest you most?',
+                instruction: 'Rank these themes from most interesting (1) to least interesting (7):',
+                options: [
+                    {
+                        text: 'Religion, ritual, cultural identity, and transnational religious movements',
+                        scoring: {1: {religion_culture: 4, geo_transnational: 1}, 2: {religion_culture: 3}, 3: {religion_culture: 2}, 4: {religion_culture: 1}, 5: {}, 6: {}, 7: {}}
+                    },
+                    {
+                        text: 'Environmental history, natural disasters, water management, and climate change',
+                        scoring: {1: {environment: 4, temporal_longduration: 1}, 2: {environment: 3}, 3: {environment: 2}, 4: {environment: 1}, 5: {}, 6: {}, 7: {}}
+                    },
+                    {
+                        text: 'Colonialism, decolonization, Holocaust, and the politics of memory and justice',
+                        scoring: {1: {injustices: 4, geo_globalsouth: 1}, 2: {injustices: 3}, 3: {injustices: 2}, 4: {injustices: 1}, 5: {}, 6: {}, 7: {}}
+                    },
+                    {
+                        text: 'Labour movements, migration, slavery, and the history of capitalism',
+                        scoring: {1: {social_movements: 4, injustices: 2, geo_transnational: 1}, 2: {social_movements: 3, injustices: 1}, 3: {social_movements: 2}, 4: {social_movements: 1}, 5: {}, 6: {}, 7: {}}
+                    },
+                    {
+                        text: 'Gender, sexuality, and the body in history',
+                        scoring: {1: {religion_culture: 2, injustices: 2}, 2: {religion_culture: 1, injustices: 1}, 3: {religion_culture: 1}, 4: {}, 5: {}, 6: {}, 7: {}}
+                    },
+                    {
+                        text: 'War, conflict, and peace movements',
+                        scoring: {1: {social_movements: 2, injustices: 2, temporal_modern: 1}, 2: {social_movements: 1, injustices: 1}, 3: {social_movements: 1}, 4: {}, 5: {}, 6: {}, 7: {}}
+                    },
+                    {
+                        text: 'Technology, science, and knowledge production',
+                        scoring: {1: {religion_culture: 1, environment: 1, theory_score: 2}, 2: {theory_score: 1}, 3: {theory_score: 1}, 4: {}, 5: {}, 6: {}, 7: {}}
+                    }
+                ],
+                snippet: 'Did you know? VU\'s history faculty includes over 30 scholars working on topics from ancient Mesopotamia to contemporary China, from Holocaust memory to water management—one of the most diverse and internationally connected teams in Europe.'
+            },
+            {
+                type: 'ranking',
+                title: 'Which research methods appeal to you most?',
+                instruction: 'Rank these approaches from most appealing (1) to least appealing (5):',
+                options: [
+                    {
+                        text: 'Conducting oral history interviews with people who lived through historical events',
+                        scoring: {1: {method_oral: 4, social_movements: 2, temporal_contemporary: 2}, 2: {method_oral: 2, social_movements: 1, temporal_contemporary: 1}, 3: {method_oral: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Using digital tools - databases, text mining, network analysis, GIS mapping',
+                        scoring: {1: {method_digital: 4, environment: 1, theory_score: 2}, 2: {method_digital: 2, theory_score: 1}, 3: {method_digital: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Working with traditional archives - letters, government documents, trial records, organizational files',
+                        scoring: {1: {method_archival: 4, injustices: 1, social_movements: 1}, 2: {method_archival: 2}, 3: {method_archival: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Analyzing material objects, visual sources, and cultural artifacts (photographs, art, religious objects, buildings)',
+                        scoring: {1: {method_material: 4, religion_culture: 2}, 2: {method_material: 2, religion_culture: 1}, 3: {method_material: 1}, 4: {}, 5: {}}
+                    },
+                    {
+                        text: 'Comparative analysis across different regions, periods, or case studies',
+                        scoring: {1: {theory_score: 2, social_movements: 1, injustices: 1, religion_culture: 1, environment: 1, temporal_modern: 1, geo_transnational: 1}, 2: {theory_score: 1, geo_transnational: 1}, 3: {theory_score: 1}, 4: {}, 5: {}}
+                    }
+                ],
+                snippet: 'Did you know? VU historians have pioneered innovative methods including olfactory history (reconstructing historical smells!), digital text mining of centuries of Dutch chronicles, and computational analysis of religious networks.'
+            },
+            {
+                type: 'multiple',
+                title: 'When you read or watch historical accounts, what engages you most?',
+                instruction: 'Choose one:',
+                options: [
+                    {
+                        text: 'Learning how societies adapted to or were shaped by environmental challenges',
+                        scoring: {environment: 3, temporal_longduration: 1}
+                    },
+                    {
+                        text: 'Stories of people organizing collectively to fight for their rights and dignity',
+                        scoring: {social_movements: 3}
+                    },
+                    {
+                        text: 'Understanding how systems of power created and maintained injustice',
+                        scoring: {injustices: 3, theory_score: 1}
+                    },
+                    {
+                        text: 'Discovering how people found meaning through beliefs, rituals, and cultural practices',
+                        scoring: {religion_culture: 3, theory_score: 1}
+                    }
+                ]
+            },
+            {
+                type: 'multiple',
+                title: 'Which geographical or temporal focus appeals to you most?',
+                instruction: 'Choose one:',
+                options: [
+                    {
+                        text: 'Long-term environmental history - from medieval water management to contemporary climate change',
+                        scoring: {environment: 3, temporal_longduration: 2}
+                    },
+                    {
+                        text: '19th-20th century global labour movements, migration, and industrialization',
+                        scoring: {social_movements: 3, geo_transnational: 2, temporal_modern: 2}
+                    },
+                    {
+                        text: 'Colonial periods in Asia, Africa, and Indonesia',
+                        scoring: {injustices: 3, geo_globalsouth: 2, temporal_modern: 2}
+                    },
+                    {
+                        text: 'Postcolonial and decolonization movements in Latin America and the Caribbean',
+                        scoring: {injustices: 2, social_movements: 1, geo_globalsouth: 2, temporal_modern: 1}
+                    },
+                    {
+                        text: 'Early modern European religious transformations (1500-1800)',
+                        scoring: {religion_culture: 3, temporal_earlymodern: 2}
+                    },
+                    {
+                        text: 'Contemporary religion and identity in the Middle East and beyond',
+                        scoring: {religion_culture: 3, temporal_contemporary: 2}
+                    }
+                ]
+            },
+            {
+                type: 'ternary',
+                title: 'Which types of historical impact interest you?',
+                instruction: 'For each type, indicate: Yes / Maybe / No',
+                options: [
+                    {
+                        text: 'How collective action changed labour rights, democracy, or social equality',
+                        scoring: {yes: {social_movements: 3}, maybe: {social_movements: 1}, no: {}}
+                    },
+                    {
+                        text: 'How colonialism, slavery, and systemic discrimination created lasting inequalities',
+                        scoring: {yes: {injustices: 3, geo_globalsouth: 1}, maybe: {injustices: 1}, no: {}}
+                    },
+                    {
+                        text: 'How religious movements, cultural exchange, or migration shaped identities',
+                        scoring: {yes: {religion_culture: 3, geo_transnational: 1}, maybe: {religion_culture: 1}, no: {}}
+                    },
+                    {
+                        text: 'How environmental disasters, resource use, or climate shaped civilizations',
+                        scoring: {yes: {environment: 3, temporal_longduration: 1}, maybe: {environment: 1}, no: {}}
+                    }
+                ],
+                snippet: 'Did you know? VU Amsterdam is home to major research centers including the HDC Centre for Religious History and has close ties to the International Institute for Social History—one of the world\'s largest archives on labour and social movements.'
+            },
+            {
+                type: 'ternary',
+                title: 'Finally, what motivates you to pursue graduate studies in history?',
+                instruction: 'For each motivation, indicate: Yes / Maybe / No',
+                options: [
+                    {
+                        text: 'I want to develop advanced research skills and contribute original knowledge to the field',
+                        scoring: {yes: {career_academia: 4, theory_score: 3}, maybe: {career_academia: 2, theory_score: 1}, no: {}}
+                    },
+                    {
+                        text: 'I want to use historical knowledge to inform policy, activism, or social change',
+                        scoring: {yes: {career_policy: 3, social_movements: 1, injustices: 1}, maybe: {career_policy: 1}, no: {}}
+                    },
+                    {
+                        text: 'I want to work in heritage, museums, or cultural institutions',
+                        scoring: {yes: {career_heritage: 3, religion_culture: 1}, maybe: {career_heritage: 1}, no: {}}
+                    },
+                    {
+                        text: 'I want to deepen my understanding of complex historical processes and theory',
+                        scoring: {yes: {theory_score: 3, career_academia: 2}, maybe: {theory_score: 1, career_academia: 1}, no: {}}
+                    }
+                ]
+            }
+        ];
+
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            renderQuestion(0);
+        }
+
+        function renderQuestion(index) {
+            const question = questions[index];
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-container active';
+            questionDiv.id = `question-${index}`;
+
+            let html = `
+                <h2 class="question-title">${question.title}</h2>
+                <p class="question-instruction">${question.instruction}</p>
+            `;
+
+            if (question.type === 'ranking') {
+                question.options.forEach((option, i) => {
+                    html += `
+                        <div class="option ranking-option">
+                            <select class="rank-select" data-option="${i}" onchange="validateRanking()">
+                                <option value="">-</option>
+                                ${Array.from({length: question.options.length}, (_, j) => 
+                                    `<option value="${j + 1}">${j + 1}</option>`
+                                ).join('')}
+                            </select>
+                            <span>${option.text}</span>
+                        </div>
+                    `;
+                });
+            } else if (question.type === 'multiple') {
+                question.options.forEach((option, i) => {
+                    html += `
+                        <div class="option" onclick="selectMultiple(${i})">
+                            <input type="radio" name="q${index}" id="q${index}_${i}" style="margin-right: 10px;">
+                            <label for="q${index}_${i}" style="cursor: pointer;">${option.text}</label>
+                        </div>
+                    `;
+                });
+            } else if (question.type === 'ternary') {
+                question.options.forEach((option, i) => {
+                    html += `
+                        <div class="option ternary-option">
+                            <div class="ternary-text">${option.text}</div>
+                            <div class="ternary-buttons">
+                                <button class="ternary-btn" onclick="selectTernary(${i}, 'yes')">Yes</button>
+                                <button class="ternary-btn" onclick="selectTernary(${i}, 'maybe')">Maybe</button>
+                                <button class="ternary-btn" onclick="selectTernary(${i}, 'no')">No</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            if (question.snippet) {
+                html += `<div class="did-you-know" id="snippet-${index}">${question.snippet}</div>`;
+            }
+
+            questionDiv.innerHTML = html;
+            container.appendChild(questionDiv);
+
+            // Restore previous answers if going back
+            if (userAnswers[index]) {
+                restoreAnswer(index);
+            }
+
+            updateProgress();
+            updateButtons();
+        }
+
+        function selectMultiple(optionIndex) {
+            const question = questions[currentQuestion];
+            
+            // Check if this is the background question
+            if (question.background_question) {
+                student_background = question.options[optionIndex].background;
+            }
+            
+            const radio = document.getElementById(`q${currentQuestion}_${optionIndex}`);
+            radio.checked = true;
+            document.getElementById('next-btn').disabled = false;
+            
+            // Store answer
+            userAnswers[currentQuestion] = {type: 'multiple', value: optionIndex};
+        }
+
+        function selectTernary(optionIndex, choice) {
+            const buttons = document.querySelectorAll(`.option:nth-child(${optionIndex + 3}) .ternary-btn`);
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (!userAnswers[currentQuestion]) {
+                userAnswers[currentQuestion] = {type: 'ternary', value: {}};
+            }
+            userAnswers[currentQuestion].value[optionIndex] = choice;
+
+            // Check if all options answered
+            const question = questions[currentQuestion];
+            const allAnswered = question.options.every((_, i) => 
+                userAnswers[currentQuestion].value[i] !== undefined
+            );
+            document.getElementById('next-btn').disabled = !allAnswered;
+        }
+
+        function validateRanking() {
+            const selects = document.querySelectorAll('.rank-select');
+            const values = Array.from(selects).map(s => s.value).filter(v => v);
+            const uniqueValues = new Set(values);
+            
+            const question = questions[currentQuestion];
+            const isValid = values.length === question.options.length && 
+                           uniqueValues.size === question.options.length;
+
+            document.getElementById('next-btn').disabled = !isValid;
+
+            if (isValid) {
+                userAnswers[currentQuestion] = {
+                    type: 'ranking',
+                    value: Array.from(selects).map(s => parseInt(s.value))
+                };
+            }
+        }
+
+        function restoreAnswer(index) {
+            const answer = userAnswers[index];
+            if (!answer) return;
+
+            if (answer.type === 'ranking') {
+                const selects = document.querySelectorAll('.rank-select');
+                answer.value.forEach((rank, i) => {
+                    selects[i].value = rank;
+                });
+            } else if (answer.type === 'multiple') {
+                const radio = document.getElementById(`q${index}_${answer.value}`);
+                if (radio) radio.checked = true;
+            } else if (answer.type === 'ternary') {
+                Object.keys(answer.value).forEach(optionIndex => {
+                    const choice = answer.value[optionIndex];
+                    const buttons = document.querySelectorAll(`.option:nth-child(${parseInt(optionIndex) + 3}) .ternary-btn`);
+                    buttons.forEach(btn => {
+                        if (btn.textContent.toLowerCase() === choice) {
+                            btn.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            // Show snippet if exists
+            const question = questions[currentQuestion];
+            if (question.snippet) {
+                const snippet = document.getElementById(`snippet-${currentQuestion}`);
+                if (snippet && !snippet.classList.contains('show')) {
+                    snippet.classList.add('show');
+                    document.getElementById('next-btn').textContent = 'Continue';
+                    return;
+                }
+            }
+
+            // Calculate scores for this answer
+            calculateQuestionScore(currentQuestion);
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                renderQuestion(currentQuestion);
+                document.getElementById('next-btn').textContent = 'Next';
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion(currentQuestion);
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        function updateButtons() {
+            document.getElementById('back-btn').style.display = currentQuestion > 0 ? 'block' : 'none';
+            document.getElementById('next-btn').disabled = !userAnswers[currentQuestion];
+        }
+
+        function calculateQuestionScore(qIndex) {
+            const question = questions[qIndex];
+            const answer = userAnswers[qIndex];
+
+            // Skip scoring for background question
+            if (question.background_question) {
+                return;
+            }
+
+            if (answer.type === 'ranking') {
+                answer.value.forEach((rank, optionIndex) => {
+                    const scoring = question.options[optionIndex].scoring[rank];
+                    if (scoring) {
+                        Object.keys(scoring).forEach(key => {
+                            scores[key] += scoring[key];
+                        });
+                    }
+                });
+            } else if (answer.type === 'multiple') {
+                const scoring = question.options[answer.value].scoring;
+                Object.keys(scoring).forEach(key => {
+                    scores[key] += scoring[key];
+                });
+            } else if (answer.type === 'ternary') {
+                Object.keys(answer.value).forEach(optionIndex => {
+                    const choice = answer.value[optionIndex];
+                    const scoring = question.options[optionIndex].scoring[choice];
+                    if (scoring) {
+                        Object.keys(scoring).forEach(key => {
+                            scores[key] += scoring[key];
+                        });
+                    }
+                });
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            
+            // Determine primary profile
+            const profileScores = {
+                'Social Movements and Protest': scores.social_movements,
+                'Power, Politics and Historical Injustices': scores.injustices,
+                'Religion, Culture, and Identity': scores.religion_culture,
+                'Environment, Climate and Society': scores.environment
+            };
+
+            const sortedProfiles = Object.entries(profileScores).sort((a, b) => b[1] - a[1]);
+            const primaryProfile = sortedProfiles[0][0];
+            const primaryScore = sortedProfiles[0][1];
+            const secondaryProfile = sortedProfiles[1][0];
+            const secondaryScore = sortedProfiles[1][1];
+            const showSecondary = (primaryScore - secondaryScore) <= 3;
+
+            // Check RMA
+            const showRMA = (scores.career_academia >= 8 && scores.theory_score >= 6) || scores.career_academia >= 10;
+
+            // Select faculty
+            const faculty = selectFaculty(primaryProfile);
+
+            // Check bonuses
+            const showDigitalBonus = scores.method_digital >= 5;
+            const showTheoryBonus = scores.theory_score >= 7 && !showRMA;
+            const emphasizeHeritage = scores.career_heritage >= 5 && primaryProfile === 'Religion, Culture, and Identity';
+            const emphasizeIISH = scores.career_policy >= 5 && (primaryProfile === 'Social Movements and Protest' || primaryProfile === 'Power, Politics and Historical Injustices');
+
+            // Render results
+            const resultsHTML = generateResultsHTML(primaryProfile, secondaryProfile, showSecondary, showRMA, faculty, showDigitalBonus, showTheoryBonus, emphasizeHeritage, emphasizeIISH);
+            
+            document.getElementById('results-screen').innerHTML = resultsHTML;
+            document.getElementById('results-screen').classList.add('active');
+        }
+
+        function selectFaculty(profile) {
+            const faculty = {primary: '', primaryDesc: '', secondary: '', secondaryDesc: ''};
+
+            if (profile === 'Social Movements and Protest') {
+                if (scores.geo_globalsouth >= 2 || scores.geo_transnational >= 3) {
+                    faculty.primary = 'Ulbe Bosma';
+                    faculty.primaryDesc = 'Slavery, forced labour, migration, and the history of commodities';
+                } else {
+                    faculty.primary = 'Lucas Poy';
+                    faculty.primaryDesc = 'Labour history, socialism, Latin America, and migration';
+                }
+
+                if (scores.method_archival >= 3 || scores.injustices >= 10) {
+                    faculty.secondary = 'Pepijn Brandon';
+                    faculty.secondaryDesc = 'Slavery, colonialism, and the history of capitalism';
+                } else {
+                    faculty.secondary = 'Dienke Hondius';
+                    faculty.secondaryDesc = 'Holocaust, slavery, and Netherlands political history';
+                }
+            } else if (profile === 'Power, Politics and Historical Injustices') {
+                if (scores.geo_globalsouth >= 2) {
+                    faculty.primary = 'Susie Protschky';
+                    faculty.primaryDesc = 'Colonialism, decolonisation, photography, and Indonesia';
+                } else {
+                    faculty.primary = 'Dienke Hondius';
+                    faculty.primaryDesc = 'Holocaust, slavery, and Netherlands political history';
+                }
+
+                if (scores.temporal_contemporary >= 2) {
+                    faculty.secondary = 'Patricia Schor';
+                    faculty.secondaryDesc = 'Race, Anti-Blackness, and Anti-Semitism';
+                } else if (scores.career_heritage >= 2) {
+                    faculty.secondary = 'Wim Manuhutu';
+                    faculty.secondaryDesc = 'Indonesia, colonial heritage, and museums';
+                } else {
+                    faculty.secondary = 'Patricia Schor';
+                    faculty.secondaryDesc = 'Race, Anti-Blackness, and Anti-Semitism';
+                }
+            } else if (profile === 'Religion, Culture, and Identity') {
+                if (scores.temporal_earlymodern >= 2) {
+                    faculty.primary = 'Fred van Lieburg';
+                    faculty.primaryDesc = 'History of religion and Dutch Protestantism';
+                } else if (scores.temporal_contemporary >= 2) {
+                    faculty.primary = 'Younes Saramifar';
+                    faculty.primaryDesc = 'Material religion, contemporary Middle East, Islam, and violence';
+                } else {
+                    faculty.primary = 'Fred van Lieburg';
+                    faculty.primaryDesc = 'History of religion and Dutch Protestantism';
+                }
+
+                if (scores.method_digital >= 3) {
+                    faculty.secondary = 'Inger Leemans';
+                    faculty.secondaryDesc = 'Cultural history, emotions, digital humanities, and the Dutch Enlightenment';
+                } else if (scores.geo_transnational >= 2) {
+                    faculty.secondary = 'Pál Nyiri';
+                    faculty.secondaryDesc = 'Migration, nationalism, and modern China';
+                } else {
+                    faculty.secondary = 'Inger Leemans';
+                    faculty.secondaryDesc = 'Cultural history, emotions, digital humanities, and the Dutch Enlightenment';
+                }
+            } else if (profile === 'Environment, Climate and Society') {
+                faculty.primary = 'Petra van Dam';
+                faculty.primaryDesc = 'Water and environmental history, Dutch water management, and human-nature interactions';
+
+                if (scores.geo_globalsouth >= 2) {
+                    faculty.secondary = 'Wesley Mwatwara';
+                    faculty.secondaryDesc = 'Agriculture, armed conflict, and West African history';
+                } else {
+                    faculty.secondary = 'Caro Verbeek';
+                    faculty.secondaryDesc = 'Sensory history and innovative historical methods';
+                }
+            }
+
+            return faculty;
+        }
+
+        function getBackgroundMessage() {
+            const messages = {
+                'vu_history': "You'll continue working with faculty you already know, while our core courses (<em>Making History: From Source to Public</em> and <em>History and Theory</em>) take your historical thinking to the graduate level. The profile courses and electives open up new specializations you didn't explore in your BA.",
+                'other_history': "Our core courses (<em>Making History: From Source to Public</em> and <em>History and Theory</em>) will reinforce and deepen the foundations you built in your BA, while introducing you to VU's distinctive approach to engaged, globally-oriented history. The profile courses let you specialize in cutting-edge research areas.",
+                'social_sciences': "Your social science background is an asset, bringing valuable analytical perspectives to historical questions. Our core courses (<em>Making History: From Source to Public</em> and <em>History and Theory</em>) will give you the historical methods and theoretical frameworks to complement your existing skills.",
+                'humanities': "Your humanities background is excellent preparation for historical research. Our core courses (<em>Making History: From Source to Public</em> and <em>History and Theory</em>) will equip you with specific historical methods while building on the critical thinking skills you've already developed.",
+                'liberal_arts': "Your liberal arts education has given you broad interdisciplinary foundations. Our core courses (<em>Making History: From Source to Public</em> and <em>History and Theory</em>) will help you develop specialized historical expertise while your diverse background enriches classroom discussions."
+            };
+            
+            return messages[student_background] || messages['other_history'];
+        }
+
+        function generateResultsHTML(primaryProfile, secondaryProfile, showSecondary, showRMA, faculty, showDigitalBonus, showTheoryBonus, emphasizeHeritage, emphasizeIISH) {
+            const profileContent = getProfileContent(primaryProfile);
+            
+            let html = `
+                <div class="results-header">
+                    <h2>Your Recommended Profile:</h2>
+                    <h2>${primaryProfile}</h2>
+                </div>
+
+                <p style="font-size: 18px; line-height: 1.8; color: #1e293b; margin-bottom: 25px;">${profileContent.description}</p>
+
+                <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #0077B3;">
+                    <strong>Your path at VU:</strong> ${getBackgroundMessage()}
+                </div>
+
+                ${showSecondary ? `
+                    <div class="secondary-interest">
+                        <strong>Note:</strong> You also showed strong interest in ${secondaryProfile}. The good news? You can customize your electives to explore both areas!
+                    </div>
+                ` : ''}
+
+                ${showRMA ? `
+                    <div class="rma-box">
+                        <h3>💡 Have you considered our Research Master in Global History?</h3>
+                        <p>Based on your strong interest in advanced research and theoretical frameworks, you might be an excellent fit for our two-year Research Master programme.</p>
+                        <p><strong>The RMA is designed for students who:</strong></p>
+                        <ul>
+                            <li>Want to pursue a PhD and academic career</li>
+                            <li>Are passionate about historiography and methodology</li>
+                            <li>Seek intensive supervision and advanced seminars</li>
+                            <li>Want to develop original research at the highest level</li>
+                        </ul>
+                        <p><strong>Key faculty in theory and methods:</strong></p>
+                        <ul>
+                            <li><strong>Chiel van den Akker:</strong> Historical theory and philosophy of history</li>
+                            <li><strong>Lorella Viola:</strong> Digital humanities and computational methods</li>
+                            <li><strong>Fokko Jan Dijksterhuis:</strong> History of knowledge and science</li>
+                        </ul>
+                        <p><a href="${config.links.rma}" target="_blank">Learn more about the RMA →</a></p>
+                    </div>
+                ` : ''}
+
+                <div class="results-section">
+                    <h3>What you'll study:</h3>
+                    <ul>
+                        ${profileContent.study.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="results-section">
+                    <h3>Your curriculum includes:</h3>
+                    <ul>
+                        ${profileContent.curriculum.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="results-section">
+                    <h3>Faculty who match your interests:</h3>
+                    <div class="faculty-card">
+                        <strong>${faculty.primary}</strong><br>
+                        ${faculty.primaryDesc}
+                    </div>
+                    <div class="faculty-card">
+                        <strong>${faculty.secondary}</strong><br>
+                        ${faculty.secondaryDesc}
+                    </div>
+                </div>
+
+                ${emphasizeHeritage ? `
+                    <p style="background: #e0e7ff; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                        <strong>💼 Career tip:</strong> Based on your strong interest in heritage work, we especially recommend exploring internship opportunities at the HDC Centre for Religious History, the Meertens Institute, or Amsterdam's many museums and cultural institutions.
+                    </p>
+                ` : ''}
+
+                ${emphasizeIISH ? `
+                    <p style="background: #e0e7ff; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                        <strong>💼 Career tip:</strong> Based on your strong interest in policy and social justice work, we especially recommend considering internships at the International Institute for Social History or international human rights organizations.
+                    </p>
+                ` : ''}
+
+                ${showDigitalBonus ? `
+                    <p style="background: #fef3c7; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                        <strong>💡 Additional recommendation:</strong> Given your strong interest in digital methods, you might also want to explore opportunities with <strong>Lorella Viola</strong> (Digital Humanities & Society).
+                    </p>
+                ` : ''}
+
+                ${showTheoryBonus ? `
+                    <p style="background: #fef3c7; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                        <strong>💡 Additional recommendation:</strong> Your interest in theoretical approaches suggests you might benefit from courses with <strong>Chiel van den Akker</strong> (Historical theory and philosophy of history).
+                    </p>
+                ` : ''}
+
+                <div class="next-steps">
+                    <h3>Ready to take the next step?</h3>
+                    <p>📚 <a href="${config.links.ma_programme}" target="_blank">Explore the full curriculum</a></p>
+                    <p>👥 <a href="${config.links.staff_page}" target="_blank">Meet our faculty</a></p>
+                    <p>✉️ <a href="${config.links.application}" target="_blank">Apply now</a></p>
+                    <p style="margin-top: 20px;"><strong>Questions about the programme?</strong></p>
+                    <p>📧 Contact us: <a href="mailto:${config.contact.email}">${config.contact.email}</a></p>
+                    <p style="margin-top: 15px;"><strong>Application deadlines:</strong></p>
+                    <p>• EU/EEA students: ${config.deadlines.eu_eea}<br>
+                    • Non-EU/EEA students: ${config.deadlines.non_eu_eea}</p>
+                </div>
+            `;
+
+            return html;
+        }
+
+        function getProfileContent(profile) {
+            const content = {
+                'Social Movements and Protest': {
+                    description: "You're drawn to understanding how ordinary people organized, resisted, and fought for change throughout history. This profile explores labour movements, migration, strikes, and grassroots activism from a global perspective.",
+                    study: [
+                        'Global labour and migration history',
+                        'Slavery, forced labour, and capitalism',
+                        'Social movements and collective action',
+                        'Workers\' rights and trade unions'
+                    ],
+                    curriculum: [
+                        'Core history seminars on theory, methods, and research design',
+                        '<em>Social Movements Beyond the West</em> (profile course)',
+                        '<em>Diversity, (In)Equality and Power</em> (Anthropology MA)',
+                        'Professional internship at institutions like the International Institute for Social History'
+                    ]
+                },
+                'Power, Politics and Historical Injustices': {
+                    description: "You're interested in examining how power structures created inequalities and injustices that continue to shape our world. This profile investigates colonialism, decolonization, Holocaust, slavery, and the politics of memory and justice.",
+                    study: [
+                        'Colonial and postcolonial history',
+                        'Holocaust and genocide studies',
+                        'Slavery and its legacies',
+                        'Historical injustice and human rights',
+                        'Politics of memory and commemoration'
+                    ],
+                    curriculum: [
+                        'Core history seminars on theory, methods, and research design',
+                        'Choose from: <em>Contemporary Democratic Politics</em> OR <em>Global Political Economy and Geopolitics</em> (Political Science MA)',
+                        '<em>Power, Politics and Injustice</em> (profile course)',
+                        '<em>Atrocity Actors: Perpetrators, Bystanders and Victims</em> (Law Faculty)'
+                    ]
+                },
+                'Religion, Culture, and Identity': {
+                    description: "You're fascinated by how beliefs, rituals, and cultural practices shape identities and communities. This profile explores religious history, cultural anthropology, material culture, and the role of religion in contemporary societies.",
+                    study: [
+                        'Religious transformations and movements',
+                        'Material religion and ritual practices',
+                        'Religion, violence, and trauma',
+                        'Cultural identity and transnational organizations',
+                        'Emotion and sensory history'
+                    ],
+                    curriculum: [
+                        'Core history seminars on theory, methods, and research design',
+                        '<em>Transnational Religious Organizations</em> (profile course)',
+                        '<em>Religion, Violence and Trauma</em> (Religion & Theology MA)',
+                        'Professional internship opportunities at HDC (Documentation Centre for Dutch Protestantism) or Meertens Institute'
+                    ]
+                },
+                'Environment, Climate and Society': {
+                    description: "You're interested in understanding how humans and nature have shaped each other throughout history. This profile examines water management, natural disasters, climate change, agriculture, and long-term human-environment relationships.",
+                    study: [
+                        'Water and environmental history',
+                        'Climate and natural disasters',
+                        'Agriculture and land use',
+                        'Human-nature interactions over the long term',
+                        'Environmental humanities methods'
+                    ],
+                    curriculum: [
+                        'Core history seminars on theory, methods, and research design',
+                        '<em>Key Concepts in Environmental Humanities</em> (Environmental Humanities RMA)',
+                        '<em>History of Natural Disasters</em> (profile course)',
+                        'Optional: <em>Environmental Humanities in the Field</em> internship (6 EC)'
+                    ]
+                }
+            };
+
+            return content[profile];
+        }
+    </script>
+</body>
+</html>
